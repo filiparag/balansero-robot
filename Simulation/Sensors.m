@@ -6,7 +6,7 @@ function [ o_angle, o_current_states ] = ...
 
     % Calculate ideal values
     Angular_velocity = i_lean_d1;
-    Linear_acceleration = Gravity * sin(i_lean);
+    Linear_acceleration = acos(i_lean/Gravity);
     
     % Add noise
     [Angular_velocity, o_current_states(1, :)] = IMU_Noise(Angular_velocity, 0.1, 0.05, 0.01, i_previous_states(1, :));
