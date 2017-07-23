@@ -1,0 +1,14 @@
+Remenje:
+4x	21	HTD-3M 	15
+
+Remenice:
+4x	HTD-3M 	144	48	Optibelt Omega
+
+Lageri:
+2x	SKF 626
+
+
+
+r = 10.82
+O = 67.96
+d = 7.96
