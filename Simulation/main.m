@@ -2,7 +2,10 @@
 %run Dinamika_motora.m;  %Dobijam prenosnu funkciju motora
 %Hs = Hm * Hr;           %Dobijam prenosnu funckiju sistema
 
-load Transfer_function_system.mat;
+%load Transfer_function_system.mat;
+s = tf('s');
+Hs(1) = (257.6*s^2+1.602*10^-12-1.434*10^4)/(0.01*s^5+13.25*s^4+3251*s^3+846.8*s^2-1.793*10^5*s);
+Hs(2) = (-1762*s-2.228*10^4)/(0.01*s^4+13.25*s^3+3251*s^2+846.8*s^1-1.793*10^5);
 
 Fs = 2*10^-3;              %Frekvencija odabiranja
 
