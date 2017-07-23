@@ -1,8 +1,10 @@
-run Dinamika_robota.m;  %Dobijam prenosnu funkciju robota
-run Dinamika_motora.m;  %Dobijam prenosnu funkciju motora
-Hs = Hm * Hr;           %Dobijam prenosnu funckiju sistema
+%run Dinamika_robota.m;  %Dobijam prenosnu funkciju robota
+%run Dinamika_motora.m;  %Dobijam prenosnu funkciju motora
+%Hs = Hm * Hr;           %Dobijam prenosnu funckiju sistema
 
-Fs = 10^3;              %Frekvencija odabiranja
+load Transfer_function_system.mat;
+
+Fs = 2*10^-3;              %Frekvencija odabiranja
 
 [num,den] = tfdata(Hs); %Prebacivanje iz s u z domen
   
@@ -17,7 +19,7 @@ den2=cell2mat(den(2));
 Y(1:50) = 0; Y(51:1000) = 10;          %Definisanje ulaznog signala
 X=zeros(1000,1);                       %Definisanje izlaznog signala
 for i=6:1000                           %Primena formule
-X(i) = (Y(i-5)*dnum1(1)+Y(i-4)*dnum1(2)+Y(i-3)*dnum1(3)+Y(i-2)*dnum1(4)+Y(i-1)*dnum1(5)+Y(i-5)*dnum1(6)...
+X(i) = (Y(i-5)*dnum1(1)+Y(i-4)*dnum1(2)+Y(i-3)*dnum1(3)+Y(i-2)*dnum1(4)+Y(i-1)*dnum1(5)+Y(i)*dnum1(6)...
 -X(i-5)*dden1(1)-X(i-4)*dden1(2)-X(i-3)*dden1(3)-X(i-2)*dden1(4)-X(i-1)*dden1(5)-X(i)*dden1(6))/dnum1(1);
 end;
 
