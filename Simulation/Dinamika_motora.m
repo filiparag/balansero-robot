@@ -1,5 +1,5 @@
  ke=1;  % Koeficijent indukcije meh-elk
- km=0.5;  % Koeficijent indukcije elk-meh
+ km=10;  % Koeficijent indukcije elk-meh
  R=1;    % Otpor
  M=0.01;  % Ukupni moment sila
  L=0;    % Induktivnost
@@ -10,4 +10,4 @@
  s=tf('s');
  Hm=ke/((L*s+R)*(M*s+Fv)+km*ke);
  %Hm=Iw*Hm;
- %stepplot(Hm,1);
+ %stepplot(Hm);
