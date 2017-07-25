@@ -3,8 +3,8 @@ function [ o_angle, o_current_states ] = ...
          i_previous_states, i_previous_angle)
 
     Gravity = 9.8;
-    Left_margin_gyroskop = -5;
-    Right_margin_gyroskop = 5;
+    Left_margin_gyroskop = -2000;
+    Right_margin_gyroskop = 2000;
     Left_margin_accelerometer = -2*Gravity;
     Right_margin_accelerometer = 2*Gravity;
 
@@ -16,7 +16,7 @@ function [ o_angle, o_current_states ] = ...
     
     % Add noise
     [Angular_velocity, o_current_states(1, :)] = IMU_Noise(Angular_velocity, 0.1, 0.05, 0.01, i_previous_states(1, :));
-    [Linear_acceleration, o_current_states(2, :)] = IMU_Noise(Linear_acceleration, 0, 0.05, 0.2, i_previous_states(2, :));
+    [Linear_acceleration, o_current_states(2, :)] = IMU_Noise(Linear_acceleration, 0, 0.001, 0.02, i_previous_states(2, :));
 
     % Siganl integration
      Gyroscope_angle = i_previous_angle + Angular_velocity;

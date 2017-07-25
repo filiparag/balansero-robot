@@ -1,65 +1,73 @@
-%run Dinamika_robota.m;  %Dobijam prenosnu funkciju robota
-%run Dinamika_motora.m;  %Dobijam prenosnu funkciju motora
-%Hs = Hm * Hr;           %Dobijam prenosnu funckiju sistema
+run Dinamika_robota.m;  %Dobijam prenosnu funkciju robota
+run Dinamika_motora.m;  %Dobijam prenosnu funkciju motora
+Hs = Hm * Hr;           %Dobijam prenosnu funckiju sistema
 
-%load Transfer_function_system.mat;
-s = tf('s');
-Hs(1) = (257.6*s^2+1.602*10^-12-1.434*10^4)/(0.01*s^5+13.25*s^4+3251*s^3+846.8*s^2-1.793*10^5*s);
-Hs(2) = (-1762*s-2.228*10^4)/(0.01*s^4+13.25*s^3+3251*s^2+846.8*s^1-1.793*10^5);
+w0 = 7.46;
+Fs = w0/(2*pi);              %Frekvencija odabiranja
+Fs = 10^-3;
 
-Fs = 2*10^-3;              %Frekvencija odabiranja
-
-[num,den] = tfdata(Hs); %Prebacivanje iz s u z domen
-  
-num1=cell2mat(num(1));  %Preabacivanje u nizove za theta
-den1=cell2mat(den(1));
-num2=cell2mat(num(2));  %Prebacivanje u nizove za fi
-den2=cell2mat(den(2));
-
-[dnum1,dden1]=bilinear(num1,den1,Fs);  %Bilinear za theta
-[dnum2,dden2]=bilinear(num2,den2,Fs);  %Bilinear za fi
-
-Y(1:50) = 0; Y(51:1000) = 10;          %Definisanje ulaznog signala
-X=zeros(1000,1);                       %Definisanje izlaznog signala
-for i=6:1000                           %Primena formule
-X(i) = (Y(i-5)*dnum1(1)+Y(i-4)*dnum1(2)+Y(i-3)*dnum1(3)+Y(i-2)*dnum1(4)+Y(i-1)*dnum1(5)+Y(i)*dnum1(6)...
--X(i-5)*dden1(1)-X(i-4)*dden1(2)-X(i-3)*dden1(3)-X(i-2)*dden1(4)-X(i-1)*dden1(5)-X(i)*dden1(6))/dnum1(1);
-end;
+Zs = c2d(Hs,1/1000);
 
 dt = 0.001;
 T = 1;
 
-x0 = [pi/2 pi/2];
-t = 0:dt:T;
-u = ones(size(t))*10;
-out = lsim(Hs,u,t,x0);
+[num,den] = tfdata(Zs); 
+  
+num1=cell2mat(num(1));  
+den1=cell2mat(den(1));
+num2=cell2mat(num(2));  
+den2=cell2mat(den(2));
 
-theta = out(:,1);
-fi = out(:,2);
-dtheta = diff(theta);
-dfi = diff(fi);
-fi = fi(1:T/dt);
-theta = theta(1:T/dt);
+a1 = num1(2); a2 = num1(3); a3 = num1(4); a4 = num1(5); a5 = num1(6);
+b1 = den1(2); b2 = den1(3); b3 = den1(4); b4 = den1(5); b5 = den1(6);
+c1 = num2(2); c2 = num2(3); c3 = num2(4); c4 = num2(5); 
+d1 = den2(2); d2 = den2(3); d3 = den2(4); d4 = den2(5); 
 
-x = [pi/2 0; pi/2 0];
+theta0 = pi/2;
+
 pugao = 0;
-Robot_angle = zeros(T/dt,1);
-br=0;
-       
-K = 1+Hs;
-K(1) = Hs(1)/K(1);
-K(2) = Hs(2)/K(2);
+Robot_angle = zeros(T/dt,1)+theta0;
+x(1:100) = 0;
+x(51:1000) = 10;
+y(1:1000) = theta0;
+z(1:1000) = 0;
+theta = y;
+fi = z;
+xx = [0 0; 0 0];
 
-for i=1:T/dt
-[ugao x] = Sensors(theta(i),dtheta(i),fi(i),dfi(i),x,pugao);
-br = br+1;
-    if(theta(i)>pi)  theta(i) = pi; end;    
-    if(theta(i)<-pi) theta(i) = -pi; end;
+Kp=200;
+Kd=0;
+Ki=0;
+
+error = 0; ierror = 0; derror = 0; greska = 0;
+Ti = Kp/Ki; Td = Kd/Kp;
+
+for t = 6:1000
     
-Robot_angle(br) = ugao;
+x(t) = x(t-1)+Kp*((1+(dt/Ti)+(Td/dt))*y(t)+(-1-(2*Td/dt))*y(t-1)+(Td/dt)*y(t-2));
+   
+y(t) = a1*x(t-1)+a2*x(t-2)+a3*x(t-3)+a4*x(t-4)+a5*x(t-5)-b1*y(t-1)-b2*y(t-2)-b3*y(t-3)-b4*y(t-4)-b5*y(t-5);
+z(t) = c1*x(t-1)+c2*x(t-2)+c3*x(t-3)+c4*x(t-4)-d1*z(t-1)-d2*z(t-2)-d3*z(t-3)-d4*z(t-4);
+theta(t) = y(t);
+
+fi(t) = z(t);
+dtheta(t) = theta(t) - theta(t-1);
+dfi(t) = fi(t) - fi(t-1);
+
+[ugao xx] = Sensors(theta(t),dtheta(t),fi(t),dfi(t),xx,pugao);
+
+Robot_angle(t) = ugao;
+
+%if(theta(t)> pi) theta(t) = pi;  end;    
+%if(theta(t)<-pi) theta(t) = -pi; end;
+if(Robot_angle(t)> pi) Robot_angle(t) = pi; end;    
+if(Robot_angle(t)<-pi) Robot_angle(t) = -pi; end;
+
 pugao = ugao;
 end;
 
 hold on;
-plot(Robot_angle);
 plot(theta);
+%plot(Robot_angle);
+
+%run Controler.m;
