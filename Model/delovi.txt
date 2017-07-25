@@ -1,14 +1,14 @@
 Remenje:
-4x	21	HTD-3M 	15
+4x	21	HTD-3M 	15mm
 
 Remenice:
-4x	HTD-3M 	144	48	Optibelt Omega
+4x	HTD-3M 	144	48 zuba	Optibelt Omega	15mm
+
+http://powerbelt.rs		http://www.belt.co.rs
+
+_____________________________________________________
 
 Lageri:
-2x	SKF 626
+2x	SKF 626-2Z
 
-
-
-r = 10.82
-O = 67.96
-d = 7.96
+http://www.skf.com/rs/		http://www.lezaji.com/
