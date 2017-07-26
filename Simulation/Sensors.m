@@ -33,5 +33,4 @@ function [ o_angle, o_current_states ] = ...
      
      % Get angle using complementary filter
     o_angle = Complementary_Filter( Gyroscope_angle,Accelerometer_angle, i_previous_angle);
-    
 end

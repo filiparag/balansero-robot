@@ -16,7 +16,7 @@ function [ o_signal, o_current_state ] = IMU_Noise( i_signal, i_cb, i_rw, i_fn, 
     
     % Flicker noise
     Flicker_noise_power = i_fn;
-    o_signal = o_signal + wgn(1, 1, Flicker_noise_power);
+    o_signal = o_signal + wgn(1, 1, Flicker_noise_power)/8;
 
 end
 

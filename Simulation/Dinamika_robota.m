@@ -21,10 +21,6 @@ B=[Br+Bm -Bm; -Bm Bm];
 C=[0; -m*g*L];
 D=[1; -1]; 
 
-%P=-inv(A)*C;
-%Q=-inv(A)*B;
-%R=-inv(A)*D;
-
 E = [0 0 1 0; 0 0 0 1; [0; 0] -inv(A)*C -inv(A)*B];
 F = [0; 0; inv(A)*D];
 G = [R 0 0 0; 0 1 0 0];
