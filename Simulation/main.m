@@ -18,29 +18,33 @@ c1 = num2(1); c2 = num2(2); c3 = num2(3); c4 = num2(4); c5 = num2(5);
 d1 = den2(2); d2 = den2(3); d3 = den2(4); d4 = den2(5); 
 
 theta0 = pi/4;
+Tu = 2000;
 
 pugao = 0;
-Robot_angle = zeros(2000,1)+theta0;
+Robot_angle = zeros(Tu,1)+theta0;
 x(1:100) = 0;
-x(51:2000) = 10;
-y(1:2000) = theta0;
-z(1:2000) = 0;
+x(51:Tu) = 10;
+y(1:Tu) = theta0;
+z(1:Tu) = 0;
+e(1:Tu) = 0;
 theta = y;
 fi = z;
 xx = [0 0; 0 0];
 
-Kp=861.14;
-Kd=0;
-Ki=0;
+Kp=9000;
+Kd=20;
+Ki=1800000;
 
 Ti = Kp/Ki; Td = Kd/Kp;
 
 dt=1/2000;
+target = pi/2;
 
-for t = 6:2000
-e = y-(pi/2);
+for t = 6:Tu
+e(t) = target - Robot_angle(t-1);
+
 x(t) = x(t-1)+Kp*((1+(dt/Ti)+(Td/dt))*e(t)+(-1-(2*Td/dt))*e(t-1)+(Td/dt)*e(t-2));
-   
+
 y(t) = a1*x(t)+a2*x(t-1)+a3*x(t-2)+a4*x(t-3)+a5*x(t-4)+a6*x(t-5)-b1*y(t-1)-b2*y(t-2)-b3*y(t-3)-b4*y(t-4)-b5*y(t-5);
 z(t) = c1*x(t)+c2*x(t-1)+c3*x(t-2)+c4*x(t-3)-d1*z(t-1)-d2*z(t-2)-d3*z(t-3)-d4*z(t-4);
 
@@ -63,4 +67,4 @@ end;
 
 hold on;
 plot(theta);
-plot(Robot_angle);
+%plot(Robot_angle);
