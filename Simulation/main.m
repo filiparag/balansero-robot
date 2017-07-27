@@ -18,7 +18,7 @@ c1 = num2(1); c2 = num2(2); c3 = num2(3); c4 = num2(4); c5 = num2(5);
 d1 = den2(2); d2 = den2(3); d3 = den2(4); d4 = den2(5); 
 
 theta0 = pi/4;
-Tu = 2000;
+Tu = 3000;
 
 pugao = 0;
 Robot_angle = zeros(Tu,1)+theta0;
@@ -41,7 +41,7 @@ dt=1/2000;
 target = pi/2;
 
 for t = 6:Tu
-e(t) = target - Robot_angle(t-1);
+e(t) = target - y(t-1);
 
 x(t) = x(t-1)+Kp*((1+(dt/Ti)+(Td/dt))*e(t)+(-1-(2*Td/dt))*e(t-1)+(Td/dt)*e(t-2));
 
@@ -65,6 +65,7 @@ if(Robot_angle(t)<-pi) Robot_angle(t) = -pi; end;
 pugao = ugao;
 end;
 
+vreme = linspace(0,3,3000);
 hold on;
-plot(theta);
-%plot(Robot_angle);
+plot(vreme,theta);
+plot(vreme,Robot_angle);

@@ -5,8 +5,8 @@ function [ o_angle, o_current_states ] = ...
     Gravity = 9.8;
     Left_margin_gyroskop = -2000;
     Right_margin_gyroskop = 2000;
-    Left_margin_accelerometer = -2*Gravity;
-    Right_margin_accelerometer = 2*Gravity;
+    Left_margin_accelerometer = -20*Gravity;
+    Right_margin_accelerometer = 20*Gravity;
 
     % Calculate ideal values
     Angular_velocity = i_lean_d1;
@@ -32,5 +32,6 @@ function [ o_angle, o_current_states ] = ...
     if(Accelerometer_angle<Left_margin_accelerometer) Accelerometer_angle = Left_margin_accelerometer; end;
      
      % Get angle using complementary filter
-    o_angle = Complementary_Filter( Gyroscope_angle,Accelerometer_angle, i_previous_angle);
+     % o_angle = Complementary_Filter( Gyroscope_angle,Accelerometer_angle, i_previous_angle);
+     o_angle = Accelerometer_angle;
 end
