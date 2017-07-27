@@ -35,16 +35,48 @@ den1=cell2mat(den(1));
 
 a1 = num1(1); a2 = num1(2); a3 = num1(3); a4 = num1(4); a5 = num1(5); a6 = num1(6);
 b1 = den1(2); b2 = den1(3); b3 = den1(4); b4 = den1(5); b5 = den1(6);
+c1 = num2(1); c2 = num2(2); c3 = num2(3); c4 = num2(4); c5 = num2(5); 
+d1 = den2(2); d2 = den2(3); d3 = den2(4); d4 = den2(5); 
 
 theta0 = pi/4;
 reference = pi/2;
 
 Tu = 10000;
-x = zeros(Tu,1)*100;
+x = ones(Tu,1)*10000;
 y = zeros(Tu,1)+theta0;
+z = y;
+theta = zeros(Tu,1);
+dtheta = theta;
+fi = theta;
+dfi = fi;
+xx = [0 0; 0 0];
+pugao = 0;
+Robot_angle = y;
 
 for t = 6:Tu
-y(t) = a1*x(t)+a2*x(t-1)+a3*x(t-2)+a4*x(t-3)+a5*x(t-4)+a6*x(t-5)-b1*y(t-1)-b2*y(t-2)-b3*y(t-3)-b4*y(t-4)-b5*y(t-5);
+x(t) = reference-y(t-1);
+y(t) = (a1*x(t)+a2*x(t-1)+a3*x(t-2)+a4*x(t-3)+a5*x(t-4)+a6*x(t-5)-b1*y(t-1)-b2*y(t-2)-b3*y(t-3)-b4*y(t-4)-b5*y(t-5));
+z(t) = c1*x(t)+c2*x(t-1)+c3*x(t-2)+c4*x(t-3)-d1*z(t-1)-d2*z(t-2)-d3*z(t-3)-d4*z(t-4);
 
+theta(t) = y(t)/20;
+fi(t) = z(t)/20;
+dtheta(t) = (theta(t) - theta(t-1))/20;
+dfi(t) = (fi(t) - fi(t-1))/20;
+
+[ugao xx] = Sensors(theta(t),dtheta(t),fi(t),dfi(t),xx/20,pugao);
+
+Robot_angle(t) = theta(t)+rand/10;
+
+if(theta(t)> 20*pi) theta(t) = 20*pi;  end;    
+if(theta(t)<-20*pi) theta(t) = -20*pi; end;
+if(Robot_angle(t)> pi) Robot_angle(t) = pi; end;    
+if(Robot_angle(t)<-pi) Robot_angle(t) = -pi; end;
+
+pugao = ugao;
 end;
-plot(y);
+y = y(1001:Tu);
+y = y/18;
+Robot_angle = Robot_angle(1001:Tu);
+hold on;
+plot(y+pi/2+0.1);
+plot(Robot_angle+pi/2+0.1);
