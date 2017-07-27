@@ -39,6 +39,7 @@ Ti = Kp/Ki; Td = Kd/Kp;
 
 dt=1/2000;
 target = pi/2;
+stanje = [0 0]; pstanje = stanje;
 
 for t = 6:Tu
 e(t) = target - y(t-1);
@@ -53,15 +54,17 @@ fi(t) = z(t);
 dtheta(t) = theta(t) - theta(t-1);
 dfi(t) = fi(t) - fi(t-1);
 
-[ugao xx] = Sensors(theta(t),dtheta(t),fi(t),dfi(t),xx,pugao);
+[stanje xx] = Sensors(theta(t),dtheta(t),fi(t),dfi(t),xx,pstanje); 
+ugao = IMU_Kalman([stanje(1) pstanje(1)-stanje(1) stanje(2) pstanje(2)-stanje(2)],x(t),pugao,dinamika_robota,-dinamika_motora,t==6);
 
-Robot_angle(t) = ugao;
+Robot_angle(t) = ugao(1,1);
 
 if(theta(t)> pi) theta(t) = pi;  end;    
 if(theta(t)<-pi) theta(t) = -pi; end;
-if(Robot_angle(t)> pi) Robot_angle(t) = pi; end;    
-if(Robot_angle(t)<-pi) Robot_angle(t) = -pi; end;
+%if(Robot_angle(t)> pi) Robot_angle(t) = pi; end;    
+%if(Robot_angle(t)<-pi) Robot_angle(t) = -pi; end;
 
+pstanje = stanje;
 pugao = ugao;
 end;
 
