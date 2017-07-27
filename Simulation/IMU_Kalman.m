@@ -17,7 +17,7 @@ function [ o_current_angle ] = IMU_Kalman( i_sensors, i_actuators, i_previous_an
     
     global A;   global B;   global H;   global Q;   global P;   global R;
     Un = i_actuators;
-    Xn = i_previous_angle;
+    Xn = [i_previous_angle; 0; 0];
     Zn = i_sensors;
     Pp = P;
     

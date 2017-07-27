@@ -34,4 +34,7 @@ function [ o_angle,  Gyroscope_angle, Accelerometer_angle, o_current_states ] = 
      % Get angle using complementary filter
      %o_angle = Complementary_Filter( Gyroscope_angle,Accelerometer_angle, i_previous_angle);
      o_angle = IMU_Kalman([Gyroscope_angle;Gyroscope_pangle;Accelerometer_angle;Accelerometer_pangle],Voltage_input,[i_previous_angle;i_dprevious_angle;],System_dinamics, Motor_dinamics, first_call);
+     
+     size(i_previous_angle) ;
+     size(i_dprevious_angle);
 end

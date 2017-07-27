@@ -63,11 +63,11 @@ Robot_angle(t) = ugao(1,1);
 
 if(theta(t)> pi) theta(t) = pi;  end;    
 if(theta(t)<-pi) theta(t) = -pi; end;
-%if(Robot_angle(t)> pi) Robot_angle(t) = pi; end;    
-%if(Robot_angle(t)<-pi) Robot_angle(t) = -pi; end;
+if(Robot_angle(t)> pi) Robot_angle(t) = pi; end;    
+if(Robot_angle(t)<-pi) Robot_angle(t) = -pi; end;
 
-ppugao = pugao;
-pugao = ugao;
+ppugao = pugao(1);
+pugao = ugao(1);
 pugao_gyro = ugao_gyro;
 pugao_accel = ugao_accel;
 end;
