@@ -21,6 +21,9 @@ theta0 = pi/4;
 Tu = 3000;
 
 pugao = 0;
+ppugao = 0;
+pugao_gyro = 0;
+pugao_accel = 0;
 Robot_angle = zeros(Tu,1)+theta0;
 x(1:100) = 0;
 x(51:Tu) = 10;
@@ -54,8 +57,7 @@ fi(t) = z(t);
 dtheta(t) = theta(t) - theta(t-1);
 dfi(t) = fi(t) - fi(t-1);
 
-[stanje xx] = Sensors(theta(t),dtheta(t),fi(t),dfi(t),xx,pstanje); 
-ugao = IMU_Kalman([stanje(1) pstanje(1)-stanje(1) stanje(2) pstanje(2)-stanje(2)],x(t),pugao,dinamika_robota,-dinamika_motora,t==6);
+[ugao ugao_gyro ugao_accel xx] = Sensors(theta(t),dtheta(t),fi(t),dfi(t),xx,pugao,ppugao - pugao,x(t),pugao_gyro,pugao_accel,E,F,t==6); 
 
 Robot_angle(t) = ugao(1,1);
 
@@ -64,8 +66,10 @@ if(theta(t)<-pi) theta(t) = -pi; end;
 %if(Robot_angle(t)> pi) Robot_angle(t) = pi; end;    
 %if(Robot_angle(t)<-pi) Robot_angle(t) = -pi; end;
 
-pstanje = stanje;
+ppugao = pugao;
 pugao = ugao;
+pugao_gyro = ugao_gyro;
+pugao_accel = ugao_accel;
 end;
 
 vreme = linspace(0,3,3000);
