@@ -15,12 +15,20 @@ Gyro_angle_diff = [0 diff(Gyro_angle)];
 Accel_angle = Measured_angle(1:Iterations, 10);
 Accel_angle_diff = [0 diff(Accel_angle)];
 
-Kalman_angle = zeros(Iterations);
+Kalman_estimate = zeros(4, Iterations);
 
 for It = 1:Iterations
    
-   %Kalman_angle(It)
-    oooooooooooooooo = IMU_Kalman( [Gyro_angle(It), Gyro_angle_diff(It), Accel_angle(It), Accel_angle_diff(It)], ...
-                                   Target_angle, Hr, Hm, It == 1 );
+    Kalman_value = IMU_Kalman( [Gyro_angle(It), Gyro_angle_diff(It), Accel_angle(It), Accel_angle_diff(It)], ...
+                               Target_angle, Hr, Hm, It == 1 );
+                              
+    Kalman_estimate(:, It) = Kalman_value(:, 1);
     
 end
+
+hold on;
+
+plot(True_angle(1:Iterations));
+plot(Measured_angle(1:Iterations, 10), '--');
+
+plot(Kalman_estimate(1,:), 'LineWidth', 2);

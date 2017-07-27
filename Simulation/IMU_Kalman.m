@@ -48,37 +48,37 @@ function [] = KALMAN_MATRICES ( i_dynamics_system, i_dynamics_actuators )
 
     % Observation matrix
     H = [
-        1   0   0   0   ;
-        0   0.3 0   0   ;
-        0   0   1   0   ;
-        0   0   0   0.3 ;
+        1   0   0   0
+        0   0.3 0   0
+        0   0   1   0
+        0   0   0   0.3
     ];
     global H;
     
     % Estimated process error covariance
     Q = [
-        0   0   0   0   ;
-        0   0   0   0   ;
-        0   0   0   0   ;
-        0   0   0   0   ;
+        0   0   0   0
+        0   0   0   0
+        0   0   0   0
+        0   0   0   0
     ];
     global Q;
 
     % Estimated measurement error covariance
     R = [
-        0.2 0   0   0   ;
-        0   0.2 0   0   ;
-        0   0   0.2 0   ;
-        0   0   0   0.2 ;
+        0.2 0   0   0
+        0   0.2 0   0
+        0   0   0.2 0
+        0   0   0   0.2
     ];
     global R;
 
     % Initial covariance
     P = [
-        1   0   0   0   ;
-        0   1   0   0   ;
-        0   0   1   0   ;
-        0   0   0   1   ;
+        1   0   0   0
+        0   1   0   0
+        0   0   1   0
+        0   0   0   1
     ];
     global P;
 
