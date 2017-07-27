@@ -27,4 +27,5 @@ G = [R 0 0 0; 0 1 0 0];
 
 sys=ss(E,F,G,0);
 Hr=tf(sys);
+dinamika_robota = E;
 %stepplot(Hr,1);

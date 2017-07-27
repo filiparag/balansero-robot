@@ -18,10 +18,11 @@ function [ Xn, Pn, A, B, H, Q, R ] = Kalman_filter( Un, Zn, Xp, Pp, A, B, H, Q, 
     %  Q	Estimated process error covariance
     %  R	Estimated measurement error covariance
     
+    
     %% Prediction
     X = A * Xp + B * Un;
     P = A * Pp * A.' + Q;
-    
+
     %% Observation
     Y = Zn - H * X;
     S = H * P * H.' + R;

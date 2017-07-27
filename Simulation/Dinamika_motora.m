@@ -11,3 +11,5 @@
  Hm=ke/((L*s+R)*(M*s+Fv)+km*ke);
  %Hm=Iw*Hm;
  %stepplot(Hm);
+
+ dinamika_motora = 1;
