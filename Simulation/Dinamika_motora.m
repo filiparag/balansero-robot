@@ -12,4 +12,4 @@
  %Hm=Iw*Hm;
  %stepplot(Hm);
 
- dinamika_motora = 1;
+ dinamika_motora = -1000;
