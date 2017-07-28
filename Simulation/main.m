@@ -54,7 +54,7 @@ z(t) = c1*x(t)+c2*x(t-1)+c3*x(t-2)+c4*x(t-3)-d1*z(t-1)-d2*z(t-2)-d3*z(t-3)-d4*z(
 
 theta(t) = y(t);
 fi(t) = z(t);
-dtheta(t) = theta(t) - theta(t-1);
+dtheta(t) = theta(t) - y(t-1);
 dfi(t) = fi(t) - fi(t-1);
 
 [ugao ugao_gyro ugao_accel xx] = Sensors(theta(t),dtheta(t),fi(t),dfi(t),xx,pugao,ppugao - pugao,x(t),pugao_gyro,pugao_accel,E,F,t==6); 
@@ -63,8 +63,8 @@ Robot_angle(t) = ugao(1,1);
 
 if(theta(t)> pi) theta(t) = pi;  end;    
 if(theta(t)<-pi) theta(t) = -pi; end;
-if(Robot_angle(t)> pi) Robot_angle(t) = pi; end;    
-if(Robot_angle(t)<-pi) Robot_angle(t) = -pi; end;
+%if(Robot_angle(t)> pi) Robot_angle(t) = pi; end;    
+%if(Robot_angle(t)<-pi) Robot_angle(t) = -pi; end;
 
 ppugao = pugao(1);
 pugao = ugao(1);
