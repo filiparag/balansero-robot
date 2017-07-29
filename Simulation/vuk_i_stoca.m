@@ -63,7 +63,7 @@ fi(t) = z(t)/20;
 dtheta(t) = (theta(t) - theta(t-1))/20;
 dfi(t) = (fi(t) - fi(t-1))/20;
 
-[ugao xx] = Sensors(theta(t),dtheta(t),fi(t),dfi(t),xx/20,pugao);
+[ugao ugao_gyro ugao_accel xx] = Sensors(theta(t),dtheta(t),fi(t),dfi(t),xx,pugao,ppugao - pugao,x(t),pugao_gyro,pugao_accel,E,F,t==6); 
 
 Robot_angle(t) = theta(t)+rand/10;
 
@@ -72,7 +72,10 @@ if(theta(t)<-20*pi) theta(t) = -20*pi; end;
 if(Robot_angle(t)> pi) Robot_angle(t) = pi; end;    
 if(Robot_angle(t)<-pi) Robot_angle(t) = -pi; end;
 
-pugao = ugao;
+ppugao = pugao(1);
+pugao = ugao(1);
+pugao_gyro = ugao_gyro;
+pugao_accel = ugao_accel;
 end;
 y = y(1001:Tu);
 y = y/18;

@@ -13,7 +13,7 @@ run params.m
 
 %% Simulation
 
-Simulation_steps = 1000;
+Simulation_steps = 2500;
 
 History = zeros(size(1:Simulation_steps, 1), 4);
 % [ theta fi angle angle_accel angle_gyro ]
@@ -46,12 +46,13 @@ for t = 6:Simulation_steps
     
 end
 
+vreme = linspace(0,Simulation_steps/1000,Simulation_steps);
 
 %% Plotting
 
 hold on;
 
-plot(History(:, 1))
-plot(History(:, 4:5), '--')
-plot(History(:, 3), 'LineWidth', 2)
+plot(vreme, History(:, 1), 'LineWidth', 2)
+% plot(History(:, 4:5), '--')
+plot(vreme, History(:, 3), 'LineWidth', 2)
 
