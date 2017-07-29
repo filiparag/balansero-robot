@@ -1,14 +1,9 @@
-function [ o_current_angle ] = IMU_Kalman( i_sensors, i_actuators, i_previous_angle, ...
+function [ o_current_angle ] = IMU_Kalman( i_sensors, i_actuators, i_previous_state, ...
                                            i_dynamics_system, i_dynamics_actuators, i_set_matrices )
 
     %% Combine sensor readings
     %  i_sensors    =   [ gyro_angle, gyro_angle_diff, accel_angle, accel_angle_diff ]
-    i_sensors = [
-        (i_sensors(1) + i_sensors(3)) / 2
-        (i_sensors(2) + i_sensors(4)) / 2
-    ];
 
-    
     %% Kalman filter matrices
     
     if (i_set_matrices)
@@ -17,7 +12,7 @@ function [ o_current_angle ] = IMU_Kalman( i_sensors, i_actuators, i_previous_an
     
     global A;   global B;   global H;   global Q;   global P;   global R;
     Un = i_actuators;
-    Xn = [i_previous_angle; 0; 0];
+    Xn = [i_previous_state; 0; 0];
     Zn = i_sensors;
     Pp = P;
     
@@ -51,8 +46,10 @@ function [] = KALMAN_MATRICES ( i_dynamics_system, i_dynamics_actuators )
 
     % Observation matrix
     H = [
-        0.5 0	0.5	0
-        0   0.5 0   0.5
+        15   0   0   0
+        0   15   0   0
+        15   0   0   0
+        0   15   0   0
     ];
     global H;
     
@@ -67,8 +64,10 @@ function [] = KALMAN_MATRICES ( i_dynamics_system, i_dynamics_actuators )
 
     % Estimated measurement error covariance
     R = [
-        0.2 0
-        0   0.2
+        0.1 0   0   0
+        0   0.1 0   0
+        0   0   0.1 0
+        0   0   0   0.1 
     ];
     global R;
 
