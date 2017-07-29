@@ -15,7 +15,7 @@ function [ o_angle,  Gyroscope_angle, Accelerometer_angle, o_current_states ] = 
     o_current_states = i_previous_states;
     
     % Add noise
-    [Angular_velocity, o_current_states(1, :)] = IMU_Noise(Angular_velocity, 0.1, 0.05, 0.01, i_previous_states(1, :));
+    [Angular_velocity, o_current_states(1, :)] = IMU_Noise(Angular_velocity, 0.01, 0.01, 0.01, i_previous_states(1, :));
     [Linear_acceleration, o_current_states(2, :)] = IMU_Noise(Linear_acceleration, 0, 0.001, 0.02, i_previous_states(2, :));
 
     % Siganl integration
@@ -33,7 +33,7 @@ function [ o_angle,  Gyroscope_angle, Accelerometer_angle, o_current_states ] = 
      
      % Get angle using complementary filter
      %o_angle = Complementary_Filter( Gyroscope_angle,Accelerometer_angle, i_previous_angle);
-     o_angle = IMU_Kalman([Gyroscope_angle;Gyroscope_pangle;Accelerometer_angle;Accelerometer_pangle],Voltage_input,[i_previous_angle;i_dprevious_angle;],System_dinamics, Motor_dinamics, first_call);
+     o_angle = IMU_Kalman([Gyroscope_angle;Gyroscope_pangle;Accelerometer_angle;Accelerometer_pangle],Voltage_input,[i_lean; i_lean_d1; ],System_dinamics, Motor_dinamics, first_call);
      
      size(i_previous_angle) ;
      size(i_dprevious_angle);
