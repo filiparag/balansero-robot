@@ -1,10 +1,10 @@
 enum  dimension {X, Y, Z};
 
-double reference = 1;
+double reference = -0.65;
 double angle = 0;
 
-double Kp = 10;
-double Kd = 5;
+double Kp = 8;
+double Kd = 0;
 double Ki = 0;
 double range = 1; //Ako je range = 0, koeficijenti mogu da idu od 0 do 5
 
@@ -16,6 +16,8 @@ double u = 0;
 
 int Pin_PWM = 9;
 int Pin_DIR = 8;
+
+bool manual_pid = true;
 
 namespace IMU {
 
@@ -96,9 +98,17 @@ double read_value (dimension d) {
 }
 
 void setup () {
+  
   Serial.begin(57600);
   pinMode(Pin_PWM, OUTPUT);
   pinMode(Pin_DIR, OUTPUT);
+
+  if (manual_pid) {
+      Kp = analogRead(A3) / 886.0 * 30.0;
+      Kd = analogRead(A1) / 886.0 * 50.0;
+//      Serial.println(Kp);
+  }
+  
 }
 
 void loop () {
@@ -107,9 +117,10 @@ void loop () {
     IMU::buffer_add(Serial.read());
 
   if (IMU::new_measurement) {
+    
     angle = IMU::read_value(Z);
 
-    //    Serial.println(angle);
+//        Serial.println(angle);
 
 
 
@@ -120,7 +131,7 @@ void loop () {
     error = reference - angle;
     derror = error - last_error;
     ierror = ierror + error;
-    u = error * Kp + error * Kd + error * Ki;
+    u = error * Kp + derror * Kd + ierror * Ki;
     Motor(round(u));
     last_error = error;
   }
@@ -141,7 +152,11 @@ void Motor(int input)
   analogWrite(Pin_PWM, voltage);
   digitalWrite(Pin_DIR, dir);
 
-  Serial.println(angle);
-
-  //    Serial.println(voltage);
+      Serial.print(angle);
+      Serial.print(',');
+      Serial.print(Kp);
+      Serial.print(',');
+      Serial.print(Kd);
+      Serial.print(',');
+      Serial.println(u);
 }
