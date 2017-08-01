@@ -1,10 +1,10 @@
 enum  dimension {X, Y, Z};
 
-double reference = 1;
+double reference = -0.4;
 double angle = 0;
 
-double Kp = 10;
-double Kd = 5;
+double Kp = 0; //15.25
+double Kd = 0; //13.51
 double Ki = 0;
 double range = 1; //Ako je range = 0, koeficijenti mogu da idu od 0 do 5
 
@@ -113,14 +113,13 @@ void loop () {
 
 
 
-    //   Kp = analogRead(A0)*(5.0/1023.0)*range;
-    //   Kd = analogRead(A1)*(5.0/1023.0)*range;
-    //   Ki = analogRead(A2)*(5.0/1023.0)*range;
+     Kp = analogRead(A3) / 886.0 * 30;
+     Kd = analogRead(A1) / 886.0 * 50;
 
     error = reference - angle;
     derror = error - last_error;
     ierror = ierror + error;
-    u = error * Kp + error * Kd + error * Ki;
+    u = error * Kp + derror * Kd + ierror * Ki;
     Motor(round(u));
     last_error = error;
   }
@@ -141,7 +140,12 @@ void Motor(int input)
   analogWrite(Pin_PWM, voltage);
   digitalWrite(Pin_DIR, dir);
 
-  Serial.println(angle);
-
-  //    Serial.println(voltage);
+  Serial.print(angle);
+  Serial.print(',');
+  Serial.print(voltage);
+  Serial.print(',');
+  Serial.print(Kd);
+  Serial.print(',');
+  Serial.println(Kp);
+  
 }
